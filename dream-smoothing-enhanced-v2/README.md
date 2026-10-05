@@ -1,8 +1,12 @@
 # ✨ Dream Smoothing Enhanced v2
 
+
+
 > **A faster, resolution-aware evolution of Dream Smoothing Enhanced — designed to preserve its flowing painterly character on modern high-resolution images.**
+> 
 
 **Dream Smoothing Enhanced v2** is the second generation of my Dream Smoothing Enhanced filter, based on **Arto Huotari's original Dream Smoothing algorithm**.
+
 
 The original Enhanced filter produced the painterly, flowing Dream Smoothing look I wanted, but it exposed three major problems:
 
@@ -17,8 +21,10 @@ Development of v2 therefore began with four clear goals:
 - 🧵 **Use CPU parallel processing where it genuinely helps**
 - 🖼️ **Keep the same useful Dream character at higher resolutions**
 - 🌫️ **Investigate ways of controlling the nasty wisps without destroying the effect itself**
+- 
 
 The intention was not to replace Dream Smoothing with a different smoothing algorithm. The challenge was to preserve what makes the original effect distinctive while making it practical for high-resolution artwork.
+
 
 <br>
 
@@ -36,12 +42,14 @@ The major performance improvement comes from changing **where the expensive Drea
 - 🧵 **CPU parallel processing** — compatible G'MIC processing can be divided between multiple CPU threads.
 - 🧩 **Spatial overlap** — neighbouring context is retained where parallel work is divided spatially.
 - 🔬 **Source code tells the rest** — those interested in the exact implementation can follow the processing path in the code.
+- 
 
 > **The practical result:** a very large reduction in processing time while retaining the characteristic Dream Smoothing appearance at high resolutions.
 
 <br>
 
 ## 🎛️ Controls
+
 
 **Passes (Iterations)** · *Range: 1–10 · Default: 3*
 
@@ -108,6 +116,7 @@ Available choices are **Auto, One Thread, Two Threads, Four Threads, Eight Threa
 So someone with a 32-, 64-, or 128-thread workstation should normally use Auto. Auto (0) lets G’MIC choose the threading rather than forcing one of those explicit tile counts.
 One important distinction: this control is really controlling the overlapped tiling used by this smoothing implementation, not imposing a global 16-thread limit on everything G’MIC can do. G’MIC itself can use more CPU threads in other parallel operations; for example, mathematical expressions expose n as the number of running threads.
 
+
 > 💡 **Tip:** Auto is the convenient starting point, but the highest thread count is not necessarily the fastest on every CPU or image. Manual choices are provided because a particular thread count may perform better on some hardware.
 
 <br><br>
@@ -120,11 +129,13 @@ The default overlap should normally be left alone. If visible band or region bou
 
 <br>
 
+
 ## 🖼️ Output
 
 > **Dream Smoothing Enhanced v2 always creates its result as a new layer. The source layer is preserved.**
 
 <br>
+
 
 ## 👤 Credits & Attribution
 
@@ -136,6 +147,7 @@ Implementation and coding assistance: **OpenAI GPT-5.6 Sol**.
 Based on **Dream Smoothing by Arto Huotari**, with the Arto-derived portions retaining their original **CeCILL provenance**.
 
 DSE v2 additions are released under **GPL-3.0 where compatible**.
+
 
 
 **Zarir Madon**  
