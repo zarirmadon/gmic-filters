@@ -1,27 +1,27 @@
 # ✨ Dream Smoothing Enhanced v2
-
+<br>
 
 
 > **A faster, resolution-aware evolution of Dream Smoothing Enhanced — designed to preserve its flowing painterly character on modern high-resolution images.**
 > 
-
+<br>
 **Dream Smoothing Enhanced v2** is the second generation of my Dream Smoothing Enhanced filter, based on **Arto Huotari's original Dream Smoothing algorithm**.
 
-
+<br>
 The original Enhanced filter produced the painterly, flowing Dream Smoothing look I wanted, but it exposed three major problems:
 
 - 🐌 **Large images became extremely slow to process**
 - 🔍 **The apparent scale and character changed as image resolution increased**
 - 🌫️ **Sharp structures could produce unpleasant elongated wisps and trails**
 
-
+<br>
 Development of v2 therefore began with four clear goals:
 
 - ⚡ **Gain a lot of speed**
 - 🧵 **Use CPU parallel processing where it genuinely helps**
 - 🖼️ **Keep the same useful Dream character at higher resolutions**
 - 🌫️ **Investigate ways of controlling the nasty wisps without destroying the effect itself**
-- 
+  
 
 The intention was not to replace Dream Smoothing with a different smoothing algorithm. The challenge was to preserve what makes the original effect distinctive while making it practical for high-resolution artwork.
 
@@ -42,8 +42,8 @@ The major performance improvement comes from changing **where the expensive Drea
 - 🧵 **CPU parallel processing** — compatible G'MIC processing can be divided between multiple CPU threads.
 - 🧩 **Spatial overlap** — neighbouring context is retained where parallel work is divided spatially.
 - 🔬 **Source code tells the rest** — those interested in the exact implementation can follow the processing path in the code.
-- 
-
+  
+<br>
 > **The practical result:** a very large reduction in processing time while retaining the characteristic Dream Smoothing appearance at high resolutions.
 
 <br>
@@ -52,28 +52,34 @@ The major performance improvement comes from changing **where the expensive Drea
 
 
 **Passes (Iterations)** · *Range: 1–10 · Default: 3*
+
 Controls the number of iterative Dream Smoothing passes. Each additional pass develops the anisotropic smoothing further, creating stronger and more elaborate painterly forms, while fewer passes remain closer to the source and process more quickly.
 <br><br>
 
 **Merging Option** · *Default: Alpha*
+
 Controls how successive Dream-processing stages are combined. A wide selection of G'MIC blending modes is available, including **Alpha, Average, Multiply, Overlay, Screen, Softlight, Difference, Edges** and many others.
 
 Changing the merge mode can substantially alter the visual character without changing the underlying Dream algorithm.
 <br><br>
 
 **Opacity** · *Range: 0–1 · Default: 0.8*
+
 Controls the strength of the selected merging operation. Lower values reduce the influence of the incoming processed stage; higher values give it progressively greater influence.
 <br><br>
 
 **Reverse Order** · *Default: Off*
+
 Reverses the order of the images used by the selected merging operation. This can produce quite different results with non-symmetrical blending modes and provides another way of shaping the Dream result without adding another processing stage.
 <br><br>
 
 **Smoothness** · *Range: 0–5 · Default: 0.8*
+
 Controls smoothing used by the special **Edges** merge mode. It determines how smoothly the edge-based merge is formed. It does **not** simply act as a global blur or general Dream-strength control.
 <br><br>
 
 **Dream Scale** · *Range: 0–100 · Default: 50*
+
 Controls the physical scale at which Dream Smoothing operates.
 
 **This is one of the major changes in v2.** Instead of allowing image resolution to dictate the apparent size of the Dream effect, Dream Scale adjusts the internal working resolution around a reference scale.
