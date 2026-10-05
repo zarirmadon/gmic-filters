@@ -10,6 +10,7 @@ The original Enhanced filter produced the painterly, flowing Dream Smoothing loo
 - 🔍 **The apparent scale and character changed as image resolution increased**
 - 🌫️ **Sharp structures could produce unpleasant elongated wisps and trails**
 
+
 Development of v2 therefore began with four clear goals:
 
 - ⚡ **Gain a lot of speed**
@@ -78,7 +79,7 @@ Controls smoothing used by the special **Edges** merge mode. It determines how s
 
 Controls the physical scale at which Dream Smoothing operates.
 
-This is one of the major changes in v2. Instead of allowing image resolution to dictate the apparent size of the Dream effect, Dream Scale adjusts the internal working resolution around a reference scale.
+**This is one of the major changes in v2.** Instead of allowing image resolution to dictate the apparent size of the Dream effect, Dream Scale adjusts the internal working resolution around a reference scale.
 
 At **50**, the Dream worker targets approximately **1024 pixels on the image's longest side**. Lower values move toward broader, larger-scale Dream forms; higher values provide progressively finer Dream structure.
 
@@ -128,14 +129,15 @@ The default overlap should normally be left alone. If visible band or region bou
 ## 👤 Credits & Attribution
 
 **Dream Smoothing Enhanced v2**  
-Filter design, artistic direction, development and testing: **Zarir Madon**
+Filter design, development and testing: **Zarir Madon**
+
+Implementation and coding assistance: **OpenAI GPT-5.6 Sol**.
 
 Based on **Dream Smoothing by Arto Huotari**, with the Arto-derived portions retaining their original **CeCILL provenance**.
 
 DSE v2 additions are released under **GPL-3.0 where compatible**.
 
-Implementation and coding assistance: **OpenAI GPT-5.6 Sol**, developed interactively with Zarir Madon.
 
 **Zarir Madon**  
-🌐 Portfolio: [zarirmadon.com](https://zarirmadon.com/)  
-🎨 ZM Creative: [zmcreative.art](https://zmcreative.art/)
+🌐 Portfolio: [www.zarirmadon.com](https://www.zarirmadon.com/)  
+🎨 ZM Creative: [www.zmcreative.art](https://www.zmcreative.art/)
