@@ -108,13 +108,13 @@ Dream Smoothing Enhanced v2 always creates its result as a **new layer**, preser
 ## Credits & Attribution
 
 **Dream Smoothing Enhanced v2**  
-Filter design, artistic direction, development and testing: **Zarir Madon**
+Filter design, development and testing: **Zarir Madon**
 
 Based on **Dream Smoothing by Arto Huotari**, with the Arto-derived portions retaining their original **CeCILL provenance**.
 
 DSE v2 additions are released under **GPL-3.0 where compatible**.
 
-Implementation and coding assistance: **OpenAI GPT-5.6 Sol**, developed interactively with Zarir Madon.
+Implementation and coding assistance: **OpenAI GPT-5.6 Sol**.
 
 **Zarir Madon**  
 Portfolio: [zarirmadon.com](https://zarirmadon.com/)  
