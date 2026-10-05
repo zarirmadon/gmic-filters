@@ -104,6 +104,9 @@ Controls the CPU threading used by the anisotropic smoothing operation.
 
 Available choices are **Auto, One Thread, Two Threads, Four Threads, Eight Threads and Sixteen Threads**.
 
+So someone with a 32-, 64-, or 128-thread workstation should normally use Auto. Auto (0) lets G’MIC choose the threading rather than forcing one of those explicit tile counts.
+One important distinction: this control is really controlling the overlapped tiling used by this smoothing implementation, not imposing a global 16-thread limit on everything G’MIC can do. G’MIC itself can use more CPU threads in other parallel operations; for example, mathematical expressions expose n as the number of running threads.
+
 > 💡 **Tip:** Auto is the convenient starting point, but the highest thread count is not necessarily the fastest on every CPU or image. Manual choices are provided because a particular thread count may perform better on some hardware.
 
 <br><br>
