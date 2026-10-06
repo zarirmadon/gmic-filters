@@ -263,14 +263,15 @@ def render_entry(folder, title, description, icon_name):
 
 
 def main():
-    pool = build_icon_pool()
     filters = discover_filters()
-    assignments = assign_icons([f[0] for f in filters], pool)
 
-    index = "\n\n".join(
-        render_entry(folder, title, description, assignments[folder])
-        for folder, title, description in filters
-    )
+    entries = []
+    for folder, title, description in filters:
+        entries.append(
+            f'**[{title}](./{folder}/)**  \\n{description}'
+        )
+
+    index = "\n\n".join(entries)
 
     root = README.read_text(encoding="utf-8")
     if START not in root or END not in root:
