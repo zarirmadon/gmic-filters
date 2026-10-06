@@ -8,44 +8,14 @@ A collection of my G'MIC filters and image-processing tools.
 
 <!-- FILTER_INDEX_START -->
 
-<p>
-  <img src=".github/assets/icons/breeze/026-firewall-config.svg" width="52" height="52" align="left" alt="" />
-  &nbsp;&nbsp;<strong><a href="./dream-flow/">Dream Flow</a></strong><br>
-  &nbsp;&nbsp;G'MIC filter — open this folder for details, source and documentation.
-</p>
-<br clear="left">
-<hr>
+**[Dream Flow](./dream-flow/)**  \nG'MIC filter — open this folder for details, source and documentation.
 
-<p>
-  <img src=".github/assets/icons/breeze/100-blogilo.svg" width="52" height="52" align="left" alt="" />
-  &nbsp;&nbsp;<strong><a href="./dream-smoothing-enhanced-v1/">Dream Smoothing Enhanced</a></strong><br>
-  &nbsp;&nbsp;An advanced artistic filter for G'MIC that creates dreamy, ethereal effects while preserving image definition and detail.
-</p>
-<br clear="left">
-<hr>
+**[Dream Smoothing Enhanced](./dream-smoothing-enhanced-v1/)**  \nAn advanced artistic filter for G'MIC that creates dreamy, ethereal effects while preserving image definition and detail.
 
-<p>
-  <img src=".github/assets/icons/breeze/012-org.kde.ktouch.svg" width="52" height="52" align="left" alt="" />
-  &nbsp;&nbsp;<strong><a href="./dream-smoothing-enhanced-v2/">Dream Smoothing Enhanced v2</a></strong><br>
-  &nbsp;&nbsp;A faster, resolution-aware evolution of Dream Smoothing Enhanced — designed to preserve its flowing painterly character on modern high-resolution images.
-</p>
-<br clear="left">
-<hr>
+**[Dream Smoothing Enhanced v2](./dream-smoothing-enhanced-v2/)**  \nA faster, resolution-aware evolution of Dream Smoothing Enhanced — designed to preserve its flowing painterly character on modern high-resolution images.
 
-<p>
-  <img src=".github/assets/icons/breeze/089-showfoto.svg" width="52" height="52" align="left" alt="" />
-  &nbsp;&nbsp;<strong><a href="./gmic-studio/">Gmic Studio</a></strong><br>
-  &nbsp;&nbsp;G'MIC filter — open this folder for details, source and documentation.
-</p>
-<br clear="left">
-<hr>
+**[Gmic Studio](./gmic-studio/)**  \nG'MIC filter — open this folder for details, source and documentation.
 
-<p>
-  <img src=".github/assets/icons/breeze/062-org.kde.kongress.svg" width="52" height="52" align="left" alt="" />
-  &nbsp;&nbsp;<strong><a href="./painterly-diffusion/">Painterly Diffusion</a></strong><br>
-  &nbsp;&nbsp;G'MIC filter — open this folder for details, source and documentation.
-</p>
-<br clear="left">
-<hr>
+**[Painterly Diffusion](./painterly-diffusion/)**  \nG'MIC filter — open this folder for details, source and documentation.
 
 <!-- FILTER_INDEX_END -->
