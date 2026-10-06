@@ -8,14 +8,32 @@ A collection of my G'MIC filters and image-processing tools.
 
 <!-- FILTER_INDEX_START -->
 
-**[Dream Flow](./dream-flow/)**  \nG'MIC filter — open this folder for details, source and documentation.
+### [Dream Flow](./dream-flow/)
 
-**[Dream Smoothing Enhanced](./dream-smoothing-enhanced-v1/)**  \nAn advanced artistic filter for G'MIC that creates dreamy, ethereal effects while preserving image definition and detail.
+G'MIC filter — open this folder for details, source and documentation.
 
-**[Dream Smoothing Enhanced v2](./dream-smoothing-enhanced-v2/)**  \nA faster, resolution-aware evolution of Dream Smoothing Enhanced — designed to preserve its flowing painterly character on modern high-resolution images.
+<br>
 
-**[Gmic Studio](./gmic-studio/)**  \nG'MIC filter — open this folder for details, source and documentation.
+### [Dream Smoothing Enhanced](./dream-smoothing-enhanced-v1/)
 
-**[Painterly Diffusion](./painterly-diffusion/)**  \nG'MIC filter — open this folder for details, source and documentation.
+An advanced artistic filter for G'MIC that creates dreamy, ethereal effects while preserving image definition and detail.
+
+<br>
+
+### [Dream Smoothing Enhanced v2](./dream-smoothing-enhanced-v2/)
+
+A faster, resolution-aware evolution of Dream Smoothing Enhanced — designed to preserve its flowing painterly character on modern high-resolution images.
+
+<br>
+
+### [Gmic Studio](./gmic-studio/)
+
+G'MIC filter — open this folder for details, source and documentation.
+
+<br>
+
+### [Painterly Diffusion](./painterly-diffusion/)
+
+G'MIC filter — open this folder for details, source and documentation.
 
 <!-- FILTER_INDEX_END -->
