@@ -5,7 +5,6 @@ ROOT_DIR = "."
 README_PATH = "README.md"
 IGNORE_DIRS = {".git", ".github", "scripts", "assets", "docs", "node_modules", ".vscode"}
 
-# List of common preview image file names to search for
 IMAGE_NAMES = [
     "preview.png", "preview.jpg", "preview.jpeg", "preview.webp", "preview.gif",
     "thumb.png", "thumb.jpg", "thumb.jpeg", "thumb.webp",
@@ -15,9 +14,7 @@ IMAGE_NAMES = [
 
 def find_preview_image(folder_path):
     """
-    Searches for a preview image in either:
-    1. The plugin root directory (e.g., ./Film-Emulation/preview.png)
-    2. An 'images', 'assets', or 'docs' subfolder (e.g., ./Film-Emulation/images/preview.png)
+    Searches for a preview image in the folder root or subdirectories (images, assets, docs).
     """
     search_locations = [
         folder_path,
@@ -28,14 +25,11 @@ def find_preview_image(folder_path):
 
     for location in search_locations:
         if os.path.exists(location) and os.path.isdir(location):
-            # Check for explicitly named preview files
             for img_name in IMAGE_NAMES:
                 candidate = os.path.join(location, img_name)
                 if os.path.isfile(candidate):
-                    # Ensure POSIX paths for URL/GitHub rendering compatibility
                     return candidate.replace("\\", "/")
-            
-            # Fallback: pick the first supported image file found in the location
+
             for file in os.listdir(location):
                 if file.lower().endswith((".png", ".jpg", ".jpeg", ".webp", ".gif")):
                     return os.path.join(location, file).replace("\\", "/")
@@ -43,66 +37,83 @@ def find_preview_image(folder_path):
     return None
 
 
-def extract_description(folder_path):
+def extract_metadata(folder_path):
     """
-    Extracts the first paragraph or description from the plugin folder's sub-README.md.
+    Extracts title (from first `# Title` line) and description (first text line after title)
+    from the plugin's sub-README.md.
     """
     sub_readme = os.path.join(folder_path, "README.md")
+    title = folder_path.replace("-", " ").replace("_", " ").title()
+    description = "Custom G'MIC filter plugin script."
+
     if os.path.exists(sub_readme):
         with open(sub_readme, "r", encoding="utf-8") as f:
             lines = f.readlines()
-            for line in lines:
-                line = line.strip()
-                # Skip headers, empty lines, and raw HTML tags
-                if line and not line.startswith("#") and not line.startswith("<"):
-                    # Strip markdown links e.g. [text](link) -> text
-                    clean = re.sub(r'\[(.*?)\]\(.*?\)', r'\1', line)
-                    # Limit length to 120 characters with ellipsis
-                    return clean[:120] + "..." if len(clean) > 120 else clean
-                    
-    return "Custom G'MIC filter plugin."
+
+        extracted_title = None
+        extracted_desc = None
+
+        for line in lines:
+            clean_line = line.strip()
+            if not clean_line:
+                continue
+
+            # Check for title (# Header)
+            if not extracted_title and clean_line.startswith("#"):
+                extracted_title = re.sub(r"^#+\s*", "", clean_line).strip()
+                continue
+
+            # Check for description line (skip images, html, badges)
+            if extracted_title and not extracted_desc and not clean_line.startswith(("#", "<", "!", "[")):
+                clean_text = re.sub(r'\[(.*?)\]\(.*?\)', r'\1', clean_line)
+                clean_text = re.sub(r'[*_`]', '', clean_text)
+                extracted_desc = clean_text[:140] + "..." if len(clean_text) > 140 else clean_text
+                break
+
+        if extracted_title:
+            title = extracted_title
+        if extracted_desc:
+            description = extracted_desc
+
+    return title, description
 
 
-def build_html_table():
+def build_plugin_list_html():
     """
-    Scans top-level plugin folders and constructs a GitHub-friendly HTML table.
+    Constructs a clean, borderless list layout with horizontal rule separators.
     """
     folders = [f for f in os.listdir(ROOT_DIR) if os.path.isdir(f) and f not in IGNORE_DIRS]
     folders.sort()
 
-    html = "<table>\n  <thead>\n    <tr>\n"
-    html += '      <th align="center" width="22%">Preview</th>\n'
-    html += '      <th align="left" width="25%">Plugin / Folder</th>\n'
-    html += '      <th align="left" width="41%">Description</th>\n'
-    html += '      <th align="center" width="12%">Explore</th>\n'
-    html += "    </tr>\n  </thead>\n  <tbody>\n"
+    html = '<table width="100%" border="0" cellspacing="0" cellpadding="12">\n  <tbody>\n'
 
-    for folder in folders:
-        desc = extract_description(folder)
+    for index, folder in enumerate(folders):
+        title, desc = extract_metadata(folder)
         img_path = find_preview_image(folder)
 
-        # Build preview HTML thumbnail column
         if img_path:
-            img_html = f'<a href="./{folder}"><img src="./{img_path}" alt="{folder} Preview" width="140" style="border-radius: 6px;" min-height="70" /></a>'
+            img_html = f'<a href="./{folder}"><img src="./{img_path}" alt="{folder} Preview" width="150" style="border-radius: 8px;" /></a>'
         else:
-            # Fallback placeholder if no image exists in plugin folder or subfolders
             img_html = f'<a href="./{folder}"><code>[ No Preview ]</code></a>'
 
-        html += "    <tr>\n"
-        html += f'      <td align="center">{img_html}</td>\n'
-        html += f"      <td><b>📂 {folder}</b></td>\n"
-        html += f"      <td>{desc}</td>\n"
-        html += f'      <td align="center"><a href="./{folder}"><code>View ➔</code></a></td>\n'
-        html += "    </tr>\n"
+        html += '    <tr>\n'
+        html += f'      <td align="center" width="22%" valign="middle">\n        {img_html}\n      </td>\n'
+        html += f'      <td align="left" valign="middle">\n'
+        html += f'        <h3><a href="./{folder}">📂 {title}</a></h3>\n'
+        html += f'        <p>{desc}</p>\n'
+        html += f'        <a href="./{folder}"><code>Explore Filter ➔</code></a>\n'
+        html += f'      </td>\n'
+        html += '    </tr>\n'
 
-    html += "  </tbody>\n</table>"
+        # Add divider separator line between entries
+        if index < len(folders) - 1:
+            html += '    <tr><td colspan="2"><hr style="border: 0; border-top: 1px solid #30363d;" /></td></tr>\n'
+
+    html += '  </tbody>\n</table>'
     return html
 
 
 def update_main_readme():
-    """
-    Injects the generated HTML table into README.md between the target markers.
-    """
     if not os.path.exists(README_PATH):
         print(f"Error: {README_PATH} not found.")
         return
@@ -110,9 +121,9 @@ def update_main_readme():
     with open(README_PATH, "r", encoding="utf-8") as f:
         content = f.read()
 
-    new_table = build_html_table()
+    new_section = build_plugin_list_html()
     pattern = r"<!-- START_PLUGIN_SECTION -->.*?<!-- END_PLUGIN_SECTION -->"
-    replacement = f"<!-- START_PLUGIN_SECTION -->\n{new_table}\n<!-- END_PLUGIN_SECTION -->"
+    replacement = f"<!-- START_PLUGIN_SECTION -->\n{new_section}\n<!-- END_PLUGIN_SECTION -->"
 
     if re.search(pattern, content, flags=re.DOTALL):
         updated_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
@@ -125,3 +136,11 @@ def update_main_readme():
 
 if __name__ == "__main__":
     update_main_readme()
+```
+
+### Key Improvements Made:
+1. **Gridless Clean Separators**: Replaced table grid lines with clean horizontal line dividers (`<hr/>`) between filters for a modern feed look.
+2. **Sub-README Title & Description Extraction**:
+   - The Python script now parses each folder's `README.md` for the main heading (`# Title`) and uses it as the entry title.
+   - It captures the first meaningful text line following the heading for the description.
+3. **Card Accents**: Added colored callout containers (`<blockquote>`) around the main repository taglines and installation commands.
