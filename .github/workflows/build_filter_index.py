@@ -57,8 +57,6 @@ def discover():
     return items
 
 def render(folder,title,desc):
-    # GitHub README HTML is intentionally conservative: no unsupported CSS,
-    # no fake cards. The linked heading is the sole navigation target.
     return (
         f'<h3><a href="./{folder}/">{title}</a></h3>\n\n'
         f'<p>{desc}</p>'
@@ -70,7 +68,7 @@ def main():
         raise SystemExit("README.md is missing filter-index markers.")
     before,rest=source.split(START,1)
     _,after=rest.split(END,1)
-    index="\n\n<br>\n\n".join(render(*item) for item in discover())
+    index="\n".join(render(*item) for item in discover())
     result=before+START+"\n\n"+index+"\n\n"+END+after
     if result != source:
         README.write_text(result,encoding="utf-8")
