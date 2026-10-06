@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout your G'MIC filters repository
+      - name: Checkout G'MIC filters
         uses: actions/checkout@v4
 
       - name: Checkout official KDE Breeze Icons
@@ -23,13 +23,13 @@ jobs:
           path: .breeze-icons
           fetch-depth: 1
 
-      - name: Build filter index and Breeze icon pool
+      - name: Build filter index
         run: python .github/scripts/build_filter_index.py
 
       - name: Remove temporary Breeze checkout
         run: rm -rf .breeze-icons
 
-      - name: Commit generated index and icon assets
+      - name: Commit generated catalogue
         run: |
           if git diff --quiet && [ -z "$(git status --porcelain)" ]; then
             echo "Filter index already up to date."
