@@ -19,17 +19,56 @@ def strip_md(v):
 def clean_title(v):
     return re.sub(r"^[^\\w'“\"]+\\s*","",strip_md(v)).strip()
 
-def first_description(text,start):
-    text=re.sub(r"<!--.*?-->","",text[start:],flags=re.S)
-    for block in re.split(r"\\n\\s*\\n",text):
-        b=block.strip()
-        if not b or b.startswith("#") or b.startswith("![") or b.startswith("<img") or b.startswith("[![") or b.startswith("```"):
-            continue
-        if re.fullmatch(r"<br\\s*/?>",b,flags=re.I): continue
-        if b.startswith(">"): b=re.sub(r"^>\\s?","",b,flags=re.M)
-        b=strip_md(b)
-        if len(b)>=24: return b
-    return "Open this filter for documentation, source and usage information."
+def first_description(text, start):
+    """Return the first clean prose paragraph, never README metadata."""
+    text = re.sub(r"<!--.*?-->", "", text[start:], flags=re.S)
+    lines = text.splitlines()
+    paragraph = []
+
+    def usable(line):
+        x = line.strip()
+        if not x:
+            return None
+        if x.startswith(("#", "![", "[![", "```", "<img", "<div", "</div", "<p", "</p")):
+            return None
+        if re.fullmatch(r"<br\s*/?>", x, flags=re.I):
+            return None
+        # Uploaded-attachment links, badges and bare/link-heavy metadata are not descriptions.
+        low = x.lower()
+        if "user-attachments/" in low or "img.shields.io/" in low:
+            return None
+        if x.startswith("[") and "](" in x and x.count("](") >= 1:
+            return None
+        if x.startswith(">"):
+            x = re.sub(r"^>\s?", "", x)
+        clean = strip_md(x)
+        if not clean:
+            return None
+        # Avoid section labels / fragments.
+        if clean.endswith(":") or len(clean) < 20:
+            return None
+        return clean
+
+    for line in lines:
+        clean = usable(line)
+        if clean:
+            paragraph.append(clean)
+            # A real sentence/paragraph is enough; don't consume the whole README.
+            joined = " ".join(paragraph)
+            if len(joined) >= 40:
+                return joined[:360].rstrip()
+        elif paragraph:
+            joined = " ".join(paragraph).strip()
+            if len(joined) >= 24:
+                return joined[:360].rstrip()
+            paragraph = []
+
+    if paragraph:
+        joined = " ".join(paragraph).strip()
+        if len(joined) >= 24:
+            return joined[:360].rstrip()
+
+    return "Documentation, source and usage information for this G'MIC filter."
 
 def discover_filters():
     items=[]
@@ -60,8 +99,8 @@ def main():
         raise SystemExit("README.md is missing the filter-index markers.")
     before,rest=source.split(START,1); _,after=rest.split(END,1)
     items=discover_filters()
-    index="\\n\\n".join(render_filter(*x) for x in items) if items else "<p><em>No filters found.</em></p>"
-    rendered=before+START+"\\n\\n"+index+"\\n\\n"+END+after
+    index="\n\n".join(render_filter(*x) for x in items) if items else "<p><em>No filters found.</em></p>"
+    rendered=before+START+"\n\n"+index+"\n\n"+END+after
     if rendered!=source: README.write_text(rendered,encoding="utf-8")
 
 if __name__=="__main__": main()
