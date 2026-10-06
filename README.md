@@ -13,43 +13,21 @@
 
 <!-- FILTER_INDEX_START -->
 
-### [Dream Flow](./dream-flow/)
+<h3><a href="./dream-flow/">Dream Flow</a></h3>
 
-Documentation, source and usage information for this G'MIC filter.
+<p>Documentation, source and usage information for this G'MIC filter.</p>
+<h3><a href="./dream-smoothing-enhanced-v1/">Dream Smoothing Enhanced</a></h3>
 
-<sub>[View filter →](./dream-flow/)</sub>
+<p>An advanced artistic filter for G'MIC that creates dreamy, ethereal effects while preserving image definition and detail.</p>
+<h3><a href="./dream-smoothing-enhanced-v2/">Dream Smoothing Enhanced v2</a></h3>
 
-<br>
+<p>A faster, resolution-aware evolution of Dream Smoothing Enhanced — designed to preserve its flowing painterly character on modern high-resolution images.</p>
+<h3><a href="./gmic-studio/">Gmic Studio</a></h3>
 
-### [Dream Smoothing Enhanced](./dream-smoothing-enhanced-v1/)
+<p>Documentation, source and usage information for this G'MIC filter.</p>
+<h3><a href="./painterly-diffusion/">Painterly Diffusion</a></h3>
 
-An advanced artistic filter for G'MIC that creates dreamy, ethereal effects while preserving image definition and detail.
-
-<sub>[View filter →](./dream-smoothing-enhanced-v1/)</sub>
-
-<br>
-
-### [Dream Smoothing Enhanced v2](./dream-smoothing-enhanced-v2/)
-
-A faster, resolution-aware evolution of Dream Smoothing Enhanced — designed to preserve its flowing painterly character on modern high-resolution images.
-
-<sub>[View filter →](./dream-smoothing-enhanced-v2/)</sub>
-
-<br>
-
-### [Gmic Studio](./gmic-studio/)
-
-Documentation, source and usage information for this G'MIC filter.
-
-<sub>[View filter →](./gmic-studio/)</sub>
-
-<br>
-
-### [Painterly Diffusion](./painterly-diffusion/)
-
-Documentation, source and usage information for this G'MIC filter.
-
-<sub>[View filter →](./painterly-diffusion/)</sub>
+<p>Documentation, source and usage information for this G'MIC filter.</p>
 
 <!-- FILTER_INDEX_END -->
 
