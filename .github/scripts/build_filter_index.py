@@ -58,9 +58,8 @@ def discover():
 
 def render(folder,title,desc):
     return (
-        f'### [{title}](./{folder}/)\n\n'
-        f'{desc}\n\n'
-        f'<sub>[View filter →](./{folder}/)</sub>'
+        f'<h3><a href="./{folder}/">{title}</a></h3>\n\n'
+        f'<p>{desc}</p>'
     )
 
 def main():
@@ -69,7 +68,7 @@ def main():
         raise SystemExit("README.md is missing filter-index markers.")
     before,rest=source.split(START,1)
     _,after=rest.split(END,1)
-    index="\n\n<br>\n\n".join(render(*item) for item in discover())
+    index="\n".join(render(*item) for item in discover())
     result=before+START+"\n\n"+index+"\n\n"+END+after
     if result != source:
         README.write_text(result,encoding="utf-8")
