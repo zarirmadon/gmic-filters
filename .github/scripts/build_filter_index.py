@@ -6,7 +6,6 @@ import shutil
 
 ROOT = Path(__file__).resolve().parents[2]
 README = ROOT / "README.md"
-
 START = "<!-- FILTER_INDEX_START -->"
 END = "<!-- FILTER_INDEX_END -->"
 
@@ -14,190 +13,192 @@ ASSET_DIR = ROOT / ".github" / "assets" / "icons"
 POOL_DIR = ASSET_DIR / "breeze"
 ASSIGNMENTS_FILE = ASSET_DIR / "assignments.json"
 BREEZE_SOURCE = ROOT / ".breeze-icons"
-
 IGNORE_DIRS = {".git", ".github", ".breeze-icons"}
-
-# Prefer the colourful/general-purpose parts of Breeze rather than small
-# monochrome action icons. Larger sizes are preferred where available.
-CONTEXTS = ("mimetypes", "places", "devices", "categories", "status")
-SIZES = ("64", "48", "32")
-
-# Avoid names that are likely to be brands, applications, or unsuitable
-# for a generic artistic-filter catalogue.
-BLOCKED_WORDS = {
-    "apple", "android", "chrome", "chromium", "firefox", "google",
-    "microsoft", "windows", "ubuntu", "fedora", "debian", "arch",
-    "dropbox", "skype", "steam", "spotify", "twitter", "facebook",
-    "youtube", "github", "gitlab", "telegram", "discord", "whatsapp",
-    "office", "libreoffice", "adobe", "photoshop", "gimp", "inkscape",
-    "blender", "krita", "vlc", "konsole", "dolphin", "kate", "kdevelop",
-    "plasma", "kde", "emblem-important", "dialog-error"
-}
-
 POOL_SIZE = 100
+
+# IMPORTANT: use Breeze's full 48px APPLICATION artwork first.
+# This is the colourful family the user selected, not mimetype/status/action icons.
+PRIMARY_DIR = BREEZE_SOURCE / "icons" / "apps" / "48"
+FALLBACK_DIRS = [
+    BREEZE_SOURCE / "icons" / "categories" / "32",
+    BREEZE_SOURCE / "icons" / "places" / "48",
+]
+
+# Exclude obvious product/platform identities and unsuitable system symbols.
+BLOCKED = (
+    "adobe", "android", "apple", "blender", "chrome", "chromium", "discord",
+    "dropbox", "facebook", "firefox", "github", "gitlab", "google", "inkscape",
+    "krita", "libreoffice", "microsoft", "office", "opera", "skype", "spotify",
+    "steam", "telegram", "thunderbird", "twitter", "ubuntu", "vlc", "whatsapp",
+    "windows", "youtube", "gimp", "kde-logo", "plasma-logo"
+)
 
 
 def clean_title(title):
-    # Remove leading emoji/symbol decoration from child README H1.
     return re.sub(r"^[^\w'“\"]+\s*", "", title).strip()
 
 
-def first_description(text, title_end):
+def readable_first_paragraph(text, title_end):
+    """Find the first genuinely readable prose paragraph after the H1."""
     remainder = text[title_end:]
+
+    # Remove comments and common standalone HTML spacing/image lines.
+    remainder = re.sub(r"<!--.*?-->", "", remainder, flags=re.S)
+
     for block in re.split(r"\n\s*\n", remainder):
         block = block.strip()
         if not block:
             continue
-        if block.startswith("<br") or block.startswith("<!--") or block.startswith("#"):
+        if block.startswith("#"):
             continue
+        if re.fullmatch(r"<br\s*/?>", block, flags=re.I):
+            continue
+        if block.startswith("![") or block.startswith("<img"):
+            continue
+        if block.startswith("[!["):  # badge block
+            continue
+
         if block.startswith(">"):
             block = re.sub(r"^>\s?", "", block, flags=re.MULTILINE)
 
-        # Keep readable link text but remove the URL.
-        block = re.sub(r"\[(.*?)\]\(.*?\)", r"\1", block)
-        block = block.replace("**", "").replace("__", "").strip()
+        block = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", block)
+        block = re.sub(r"\[(.*?)\]\([^)]*\)", r"\1", block)
+        block = re.sub(r"<[^>]+>", "", block)
+        block = block.replace("**", "").replace("__", "").replace("`", "")
+        block = " ".join(block.split()).strip()
 
-        # Strip simple HTML tags that may appear in the opening paragraph.
-        block = re.sub(r"<[^>]+>", "", block).strip()
+        # Reject fragments that are clearly not prose.
+        if len(block) < 24:
+            continue
 
-        if block:
-            return " ".join(block.split())
+        return block
+
     return ""
 
 
-def candidate_icons():
-    if not BREEZE_SOURCE.exists():
+def collect_icon_candidates():
+    if not PRIMARY_DIR.exists():
         raise SystemExit(
-            "Official Breeze source was not found at .breeze-icons. "
-            "The GitHub workflow should check it out automatically."
+            "Breeze icons/apps/48 was not found. "
+            "The workflow should have checked out KDE/breeze-icons."
         )
 
-    candidates = {}
-    icons_root = BREEZE_SOURCE / "icons"
+    found = {}
 
-    # One version per icon name. Because sizes are processed largest first,
-    # the first copy wins.
-    for context in CONTEXTS:
-        for size in SIZES:
-            folder = icons_root / context / size
-            if not folder.exists():
+    # Full colourful application artwork gets absolute priority.
+    for directory in [PRIMARY_DIR] + FALLBACK_DIRS:
+        if not directory.exists():
+            continue
+        for svg in sorted(directory.glob("*.svg")):
+            name = svg.stem.lower()
+            if "symbolic" in name:
                 continue
+            if any(word in name for word in BLOCKED):
+                continue
+            found.setdefault(svg.stem, svg)
 
-            for svg in sorted(folder.glob("*.svg")):
-                stem_lower = svg.stem.lower()
-
-                if any(word in stem_lower for word in BLOCKED_WORDS):
-                    continue
-                if "symbolic" in stem_lower:
-                    continue
-
-                candidates.setdefault(svg.stem, svg)
-
-    # Deterministic but visually mixed selection rather than simply taking
-    # the first 100 alphabetically.
-    ordered = sorted(
-        candidates.items(),
-        key=lambda item: hashlib.sha256(item[0].encode("utf-8")).hexdigest()
-    )
-
-    if len(ordered) < POOL_SIZE:
+    if len(found) < POOL_SIZE:
         raise SystemExit(
-            f"Only {len(ordered)} suitable Breeze icons were found; "
+            f"Only {len(found)} suitable full Breeze icons were found; "
             f"{POOL_SIZE} are required."
         )
 
+    # Stable shuffle so the pool isn't simply alphabetic.
+    ordered = sorted(
+        found.items(),
+        key=lambda pair: hashlib.sha256(
+            ("breeze-colour-pool:" + pair[0]).encode("utf-8")
+        ).hexdigest()
+    )
     return ordered[:POOL_SIZE]
 
 
 def build_icon_pool():
+    ASSET_DIR.mkdir(parents=True, exist_ok=True)
     POOL_DIR.mkdir(parents=True, exist_ok=True)
 
-    selected = candidate_icons()
+    selected = collect_icon_candidates()
     wanted = set()
+    pool = []
 
-    for number, (name, source) in enumerate(selected, start=1):
+    for number, (name, source) in enumerate(selected, 1):
         dest_name = f"{number:03d}-{name}.svg"
         wanted.add(dest_name)
-        shutil.copyfile(source, POOL_DIR / dest_name)
+        dest = POOL_DIR / dest_name
+        shutil.copyfile(source, dest)
+        pool.append(dest)
 
-    # Remove obsolete pool SVGs if the selected official set changes.
     for old in POOL_DIR.glob("*.svg"):
         if old.name not in wanted:
             old.unlink()
 
-    # Keep KDE's icon licence beside the copied assets.
-    licence_source = BREEZE_SOURCE / "COPYING-ICONS"
-    if licence_source.exists():
-        shutil.copyfile(licence_source, ASSET_DIR / "BREEZE-LICENSE.txt")
+    licence = BREEZE_SOURCE / "COPYING-ICONS"
+    if licence.exists():
+        shutil.copyfile(licence, ASSET_DIR / "BREEZE-LICENSE.txt")
 
-    credit = ASSET_DIR / "BREEZE-CREDIT.md"
-    credit.write_text(
+    (ASSET_DIR / "BREEZE-CREDIT.md").write_text(
         "# KDE Breeze Icons\n\n"
         "The SVG files in `breeze/` are selected from the official KDE "
-        "Breeze Icons project and retain their original KDE licensing.\n\n"
-        "Project: https://invent.kde.org/frameworks/breeze-icons\n\n"
-        "See `BREEZE-LICENSE.txt` for the copied icon licence text.\n",
-        encoding="utf-8"
+        "Breeze Icons project and retain their original licensing.\n\n"
+        "Official project: https://invent.kde.org/frameworks/breeze-icons\n\n"
+        "See `BREEZE-LICENSE.txt`.\n",
+        encoding="utf-8",
     )
-
-    return [POOL_DIR / f"{number:03d}-{name}.svg"
-            for number, (name, _) in enumerate(selected, start=1)]
+    return pool
 
 
 def load_assignments():
     if not ASSIGNMENTS_FILE.exists():
         return {}
     try:
-        data = json.loads(ASSIGNMENTS_FILE.read_text(encoding="utf-8"))
-        return data if isinstance(data, dict) else {}
+        value = json.loads(ASSIGNMENTS_FILE.read_text(encoding="utf-8"))
+        return value if isinstance(value, dict) else {}
     except Exception:
         return {}
 
 
-def assign_icons(filter_names, pool):
-    assignments = load_assignments()
-    valid_pool_names = {p.name for p in pool}
+def assign_icons(folder_names, pool):
+    old = load_assignments()
+    valid = {p.name for p in pool}
 
-    # Drop assignments for filters that no longer exist or icons no longer
-    # present in the official 100-icon pool.
+    # Deliberately discard assignments to icons no longer in the new
+    # colourful application-style pool.
     assignments = {
-        folder: icon for folder, icon in assignments.items()
-        if folder in filter_names and icon in valid_pool_names
+        folder: icon for folder, icon in old.items()
+        if folder in folder_names and icon in valid
     }
-
     used = set(assignments.values())
 
-    for folder in sorted(filter_names):
+    for folder in sorted(folder_names):
         if folder in assignments:
             continue
 
-        # Stable hash chooses a starting point, then linear probing finds
-        # the next unused icon. Existing assignments never move.
-        start = int(hashlib.sha256(folder.encode("utf-8")).hexdigest(), 16) % len(pool)
+        start = int(
+            hashlib.sha256(("filter:" + folder).encode("utf-8")).hexdigest(), 16
+        ) % len(pool)
 
         chosen = None
         for offset in range(len(pool)):
-            icon = pool[(start + offset) % len(pool)].name
-            if icon not in used:
-                chosen = icon
+            name = pool[(start + offset) % len(pool)].name
+            if name not in used:
+                chosen = name
                 break
 
-        # Only possible after more than 100 filters.
-        if chosen is None:
+        if chosen is None:  # only after 100 filters
             chosen = pool[start].name
 
         assignments[folder] = chosen
         used.add(chosen)
 
-    ASSET_DIR.mkdir(parents=True, exist_ok=True)
     ASSIGNMENTS_FILE.write_text(
         json.dumps(assignments, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8"
+        encoding="utf-8",
     )
     return assignments
 
 
 def discover_filters():
+    """Every first-level folder containing README.md is a filter entry."""
     filters = []
 
     for folder in sorted(ROOT.iterdir()):
@@ -208,61 +209,60 @@ def discover_filters():
         if not readme.exists():
             continue
 
-        text = readme.read_text(encoding="utf-8")
+        text = readme.read_text(encoding="utf-8", errors="replace")
         match = re.search(r"^#\s+(.+?)\s*$", text, re.MULTILINE)
-        if not match:
-            continue
 
-        title = clean_title(match.group(1))
-        description = first_description(text, match.end())
+        # Do NOT drop a filter just because its README formatting is unusual.
+        if match:
+            title = clean_title(match.group(1))
+            description = readable_first_paragraph(text, match.end())
+        else:
+            title = folder.name.replace("-", " ").title()
+            description = readable_first_paragraph(text, 0)
 
-        if title and description:
-            filters.append((folder.name, title, description))
+        if not description:
+            description = "G'MIC filter — open this folder for details, source and documentation."
+
+        filters.append((folder.name, title, description))
 
     return filters
 
 
 def render_entry(folder, title, description, icon_name):
-    icon_path = f".github/assets/icons/breeze/{icon_name}".replace(" ", "%20")
-
-    # A compact two-column HTML table gives the icon enough visual weight
-    # without creating the huge vertical gaps of the old catalogue.
+    icon = f".github/assets/icons/breeze/{icon_name}".replace(" ", "%20")
+    # No table: GitHub tables draw boxes. A left-floating image gives us a
+    # clean mini-card, and clear=left prevents the next item colliding.
     return (
-        '<table><tr>\n'
-        f'<td width="54" valign="top">'
-        f'<img src="{icon_path}" width="42" height="42" alt=""></td>\n'
-        f'<td valign="top"><strong><a href="./{folder}/">{title}</a></strong><br>\n'
-        f'{description}</td>\n'
-        '</tr></table>'
+        f'<p>\n'
+        f'  <img src="{icon}" width="52" height="52" align="left" alt="" />\n'
+        f'  &nbsp;&nbsp;<strong><a href="./{folder}/">{title}</a></strong><br>\n'
+        f'  &nbsp;&nbsp;{description}\n'
+        f'</p>\n'
+        f'<br clear="left">\n'
+        f'<hr>'
     )
 
 
 def main():
     pool = build_icon_pool()
     filters = discover_filters()
-    filter_names = [folder for folder, _, _ in filters]
-    assignments = assign_icons(filter_names, pool)
+    assignments = assign_icons([f[0] for f in filters], pool)
 
-    entries = [
+    index = "\n\n".join(
         render_entry(folder, title, description, assignments[folder])
         for folder, title, description in filters
-    ]
-    index = "\n\n".join(entries)
+    )
 
-    root_text = README.read_text(encoding="utf-8")
+    root = README.read_text(encoding="utf-8")
+    if START not in root or END not in root:
+        raise SystemExit("Root README.md is missing the filter-index markers.")
 
-    if START not in root_text or END not in root_text:
-        raise SystemExit(
-            "Root README.md is missing "
-            "<!-- FILTER_INDEX_START --> and <!-- FILTER_INDEX_END -->."
-        )
-
-    before, rest = root_text.split(START, 1)
+    before, rest = root.split(START, 1)
     _, after = rest.split(END, 1)
 
     README.write_text(
         before + START + "\n\n" + index + "\n\n" + END + after,
-        encoding="utf-8"
+        encoding="utf-8",
     )
 
 
