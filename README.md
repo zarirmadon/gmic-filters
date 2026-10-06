@@ -20,45 +20,43 @@ Painterly rendering · smoothing · diffusion · high-resolution workflows
 
 <!-- FILTER_INDEX_START -->
 
-<h3><a href="./dream-flow/">Dream Flow</a></h3>
+### [Dream Flow](./dream-flow/)
 
-<p>Documentation, source and usage information for this G&#x27;MIC filter.</p>
+Documentation, source and usage information for this G'MIC filter.
 
-<sub><a href="./dream-flow/">View filter →</a></sub>
+<sub>[View filter →](./dream-flow/)</sub>
 
-<br><br>
+<br>
 
-<h3><a href="./dream-smoothing-enhanced-v1/">Dream Smoothing Enhanced V1</a></h3>
+### [Dream Smoothing Enhanced](./dream-smoothing-enhanced-v1/)
 
-<p>An advanced artistic filter for G&#x27;MIC that creates dreamy, ethereal effects while preserving image definition and detail.</p>
+An advanced artistic filter for G'MIC that creates dreamy, ethereal effects while preserving image definition and detail.
 
-<sub><a href="./dream-smoothing-enhanced-v1/">View filter →</a></sub>
+<sub>[View filter →](./dream-smoothing-enhanced-v1/)</sub>
 
-<br><br>
+<br>
 
-<h3><a href="./dream-smoothing-enhanced-v2/">Dream Smoothing Enhanced V2</a></h3>
+### [Dream Smoothing Enhanced v2](./dream-smoothing-enhanced-v2/)
 
-<p>A faster, resolution-aware evolution of Dream Smoothing Enhanced — designed to preserve its flowing painterly character on modern high-resolution images.</p>
+A faster, resolution-aware evolution of Dream Smoothing Enhanced — designed to preserve its flowing painterly character on modern high-resolution images.
 
-<sub><a href="./dream-smoothing-enhanced-v2/">View filter →</a></sub>
+<sub>[View filter →](./dream-smoothing-enhanced-v2/)</sub>
 
-<br><br>
+<br>
 
-<h3><a href="./gmic-studio/">Gmic Studio</a></h3>
+### [Gmic Studio](./gmic-studio/)
 
-<p>Documentation, source and usage information for this G&#x27;MIC filter.</p>
+Documentation, source and usage information for this G'MIC filter.
 
-<sub><a href="./gmic-studio/">View filter →</a></sub>
+<sub>[View filter →](./gmic-studio/)</sub>
 
-<br><br>
+<br>
 
-<h3><a href="./painterly-diffusion/">Painterly Diffusion</a></h3>
+### [Painterly Diffusion](./painterly-diffusion/)
 
-<p>Documentation, source and usage information for this G&#x27;MIC filter.</p>
+Documentation, source and usage information for this G'MIC filter.
 
-<sub><a href="./painterly-diffusion/">View filter →</a></sub>
-
-<br><br>
+<sub>[View filter →](./painterly-diffusion/)</sub>
 
 <!-- FILTER_INDEX_END -->
 
