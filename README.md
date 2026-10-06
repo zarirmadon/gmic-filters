@@ -20,6 +20,46 @@ Painterly rendering · smoothing · diffusion · high-resolution workflows
 
 <!-- FILTER_INDEX_START -->
 
+<h3><a href="./dream-flow/">Dream Flow</a></h3>
+
+<p>Documentation, source and usage information for this G&#x27;MIC filter.</p>
+
+<sub><a href="./dream-flow/">View filter →</a></sub>
+
+<br><br>
+
+<h3><a href="./dream-smoothing-enhanced-v1/">Dream Smoothing Enhanced V1</a></h3>
+
+<p>An advanced artistic filter for G&#x27;MIC that creates dreamy, ethereal effects while preserving image definition and detail.</p>
+
+<sub><a href="./dream-smoothing-enhanced-v1/">View filter →</a></sub>
+
+<br><br>
+
+<h3><a href="./dream-smoothing-enhanced-v2/">Dream Smoothing Enhanced V2</a></h3>
+
+<p>A faster, resolution-aware evolution of Dream Smoothing Enhanced — designed to preserve its flowing painterly character on modern high-resolution images.</p>
+
+<sub><a href="./dream-smoothing-enhanced-v2/">View filter →</a></sub>
+
+<br><br>
+
+<h3><a href="./gmic-studio/">Gmic Studio</a></h3>
+
+<p>Documentation, source and usage information for this G&#x27;MIC filter.</p>
+
+<sub><a href="./gmic-studio/">View filter →</a></sub>
+
+<br><br>
+
+<h3><a href="./painterly-diffusion/">Painterly Diffusion</a></h3>
+
+<p>Documentation, source and usage information for this G&#x27;MIC filter.</p>
+
+<sub><a href="./painterly-diffusion/">View filter →</a></sub>
+
+<br><br>
+
 <!-- FILTER_INDEX_END -->
 
 <br>
