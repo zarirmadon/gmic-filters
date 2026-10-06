@@ -19,20 +19,39 @@ POOL_SIZE = 100
 # IMPORTANT: use Breeze's full 48px APPLICATION artwork first.
 # This is the colourful family the user selected, not mimetype/status/action icons.
 PRIMARY_DIR = BREEZE_SOURCE / "icons" / "apps" / "48"
-FALLBACK_DIRS = [
-    BREEZE_SOURCE / "icons" / "categories" / "32",
-    BREEZE_SOURCE / "icons" / "places" / "48",
-]
+FALLBACK_DIRS = []
 
 # Exclude obvious product/platform identities and unsuitable system symbols.
 BLOCKED = (
+    # Brands / named applications / platforms
     "adobe", "android", "apple", "blender", "chrome", "chromium", "discord",
     "dropbox", "facebook", "firefox", "github", "gitlab", "google", "inkscape",
     "krita", "libreoffice", "microsoft", "office", "opera", "skype", "spotify",
     "steam", "telegram", "thunderbird", "twitter", "ubuntu", "vlc", "whatsapp",
-    "windows", "youtube", "gimp", "kde-logo", "plasma-logo"
-)
+    "windows", "youtube", "gimp", "kde-logo", "plasma-logo",
 
+    # Documents / files / folders / archives
+    "document", "file", "folder", "archive", "text-", "spreadsheet", "pdf",
+    "word", "presentation", "database", "package", "font", "book", "ebook",
+
+    # Power / battery / hardware / devices
+    "battery", "power", "ac-adapter", "ups", "laptop", "computer", "desktop",
+    "monitor", "display", "keyboard", "mouse", "touchpad", "printer", "scanner",
+    "camera", "webcam", "phone", "smartphone", "tablet", "drive", "disk",
+    "storage", "usb", "bluetooth", "network", "wifi", "wireless", "modem",
+    "router", "ethernet",
+
+    # System / utility / status / security
+    "system-", "preferences-", "settings", "configure", "terminal", "console",
+    "shell", "utilities", "utility", "update", "software", "installer",
+    "package-manager", "download", "upload", "trash", "lock", "unlock",
+    "security", "shield", "password", "keyring", "wallet", "warning", "error",
+    "information", "help", "notification", "clock", "calendar", "weather",
+
+    # Communications / office-like imagery
+    "mail", "email", "message", "chat", "contact", "addressbook", "rss",
+    "news", "office", "calculator"
+)
 
 def clean_title(title):
     return re.sub(r"^[^\w'“\"]+\s*", "", title).strip()
@@ -99,7 +118,7 @@ def collect_icon_candidates():
 
     if len(found) < POOL_SIZE:
         raise SystemExit(
-            f"Only {len(found)} suitable full Breeze icons were found; "
+            f"Only {len(found)} curated creative Breeze application icons were found; "
             f"{POOL_SIZE} are required."
         )
 
