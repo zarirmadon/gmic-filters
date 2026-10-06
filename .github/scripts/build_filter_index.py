@@ -268,10 +268,10 @@ def main():
     entries = []
     for folder, title, description in filters:
         entries.append(
-            f'**[{title}](./{folder}/)**  \\n{description}'
+            f'### [{title}](./{folder}/)\n\n{description}'
         )
 
-    index = "\n\n".join(entries)
+    index = "\n\n<br>\n\n".join(entries)
 
     root = README.read_text(encoding="utf-8")
     if START not in root or END not in root:
