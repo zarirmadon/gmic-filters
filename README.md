@@ -27,7 +27,7 @@
 <p>A fast, photographer-friendly GIMP 3.2 plugin front-end for G’MIC, with searchable filters, favourites, recent history, presets, live preview, zoom/pan and full parameter control.</p>
 <h3><a href="./painterly-diffusion/">Painterly Diffusion</a></h3>
 
-<p>Documentation, source and usage information for this G'MIC filter.</p>
+<p>Painterly Diffusion transforms photographs into expressive paintings by combining Dream smoothing with structure-aware diffusion tensors, while preserving controllable detail, edges and surface texture.</p>
 
 <!-- FILTER_INDEX_END -->
 
