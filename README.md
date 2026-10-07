@@ -15,7 +15,7 @@
 
 <h3><a href="./dream-flow/">Dream Flow</a></h3>
 
-<p>Documentation, source and usage information for this G'MIC filter.</p>
+<p>Dream Flow transforms photographs into fluid, dreamlike paintings by reshaping structure and detail into flowing, organic forms while retaining the character of the original image.</p>
 <h3><a href="./dream-smoothing-enhanced-v1/">Dream Smoothing Enhanced</a></h3>
 
 <p>An advanced artistic filter for G'MIC that creates dreamy, ethereal effects while preserving image definition and detail.</p>
