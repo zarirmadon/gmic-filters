@@ -3,7 +3,7 @@
 #
 # Based on Dream Smoothing by Arto Huotari (CeCILL).
 # Filter design: Zarir Madon
-# Implementation: OpenAI GPT-5.6 Sol (11 October 2026)
+# Implementation: OpenAI GPT-5.6 Sol (07 October 2026)
 # DSE v2 additions: GPL-3.0 where compatible; Arto-derived code retains its original CeCILL provenance.
 
 #@gui _<b>Artistic</b>
