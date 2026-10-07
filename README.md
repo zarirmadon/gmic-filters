@@ -24,7 +24,7 @@
 <p>A faster, resolution-aware evolution of Dream Smoothing Enhanced — designed to preserve its flowing painterly character on modern high-resolution images.</p>
 <h3><a href="./gmic-studio/">Gmic Studio</a></h3>
 
-<p>Documentation, source and usage information for this G'MIC filter.</p>
+<p>A fast, photographer-friendly GIMP 3.2 front-end for G’MIC, with searchable filters, favourites, recent history, presets, live preview, zoom/pan and full parameter control.</p>
 <h3><a href="./painterly-diffusion/">Painterly Diffusion</a></h3>
 
 <p>Documentation, source and usage information for this G'MIC filter.</p>
